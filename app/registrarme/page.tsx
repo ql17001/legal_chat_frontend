@@ -55,13 +55,8 @@ const RegisterPage = () => {
       alert("Se registro con exito");
       router.push('/iniciar-sesion');
     } catch (error) {
-      if (isAxiosError(error)) {
-        console.log("Error de axios");
-        console.log(error);
-        alert(error);
-      } else {
-        console.log("Error de otra indole");
-        console.log(error);
+      {
+       alert("Error: No pudo registrarse")
       }
     }
   };
@@ -70,12 +65,12 @@ const RegisterPage = () => {
     if (password === confirmedPassword) {
       Register();
     } else {
-      alert("Error: las contraseñas deben ser identicas");
+      alert("Error: las contraseñas no coinciden");
     }
   };
   return (
-    <div className="border border-black w-auto h-auto">
-      <div className=" grid grid-cols-4 gap-4 ">
+    <div className="px-[125px] py-14 border w-auto h-auto">
+      <div className=" px-[10px] py-6 rounded-[50px] grid grid-cols-4 gap-x-8 gap-y-6 border border-black">
         <div className="text-center col-span-4 font-bold">
           <h1>Registrarse</h1>
         </div>
