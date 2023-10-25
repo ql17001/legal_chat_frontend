@@ -1,7 +1,7 @@
 "use client";
 
 import axios, { isAxiosError } from "axios";
-import router from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useState } from "react";
 
 interface IRegisterResponse {
@@ -9,6 +9,7 @@ interface IRegisterResponse {
 }
 
 const RegisterPage = () => {
+  const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [lastName, setLastName] = useState("");
@@ -31,7 +32,9 @@ const RegisterPage = () => {
   const handlePasswordOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.currentTarget.value);
   };
-  const handleConfirmedPasswordOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleConfirmedPasswordOnChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     setConfirmedPassword(event.currentTarget.value);
   };
 
@@ -50,6 +53,7 @@ const RegisterPage = () => {
       );
 
       alert("Se registro con exito");
+      router.push('/iniciar-sesion');
     } catch (error) {
       if (isAxiosError(error)) {
         console.log("Error de axios");
