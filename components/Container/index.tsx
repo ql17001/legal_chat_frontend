@@ -7,9 +7,10 @@ interface Chil{
 
 const Container = ({children}:Chil) => {
 return (
-<div className='min-h-screen max-w-2xl m-auto flex-wrap px-48 py-40'>
-    <div className='align-middle text-center items-center top-auto bottom-auto max-w-md min-w-full p-5 mx-4 my-4 flex-col flex'>
-        {children}</div>
+<div className='min-h-screen max-w-6xl m-auto flex-wrap border border-gray-700 rounded-lg w-full my-8'>
+    
+        {children}
+        
 </div>
 )
 }
