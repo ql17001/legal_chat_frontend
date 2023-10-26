@@ -70,7 +70,7 @@ const RegisterPage = () => {
   };
   return (
     <div className="px-[125px] py-14 border w-auto h-auto">
-      <div className=" px-[10px] py-6 rounded-[50px] grid grid-cols-4 gap-x-8 gap-y-6 border border-black">
+      <div className=" px-[10px] py-6 grid grid-cols-4 gap-x-8 gap-y-6">
         <div className="text-center col-span-4 font-bold">
           <h1>Registrarse</h1>
         </div>
