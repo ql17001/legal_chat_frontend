@@ -5,11 +5,11 @@ import React, { ChangeEvent, useState } from "react";
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { persistAuthentication } from '@/utils/authentication';
 import { Routes } from "@/utils/constants";
+import { jwtDecode } from "jwt-decode";
 
 interface ILoginResponse {
   token: string;
   refreshToken: string;
-  role: string;
 }
 
 interface ILoginBody{
@@ -39,10 +39,12 @@ const LoginPage = () =>{
           headers: { "Content-Type": "application/json" }
         });
 
+        const {roles} = jwtDecode<{roles:string[]}>(response.data.token);
+
         persistAuthentication({
           token: response.data.token,
           refreshToken: response.data.refreshToken,
-          role: response.data.role,
+          role: roles[0],
         });
 
         router.push(Routes.HOME);
