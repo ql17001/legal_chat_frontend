@@ -5,7 +5,7 @@ export enum Routes {
     USUARIOS = '/usuarios',
     REGISTRARSE = '/registrarme',
     VER_PERFIL = '/perfil',
-    LOGIN = '/login'
+    LOGIN = '/iniciar-sesion'
 
 
 
