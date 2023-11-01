@@ -7,7 +7,7 @@ import { retrieveAuthentication } from "@/utils/authentication";
 interface IUserData {
     nombre: string;
     apellido: string;
-    correo: string;
+    email: string;
     dui: string;
 }
 
@@ -17,21 +17,19 @@ const fetchData = async (
     token: string
 ) => {
     try {
-        const response = await customAxios.get<IUserData>("/usuario/perfil");
-        const { nombre, apellido, correo, dui } = response.data;
+        const response = await customAxios.get<IUserData>("http://localhost:8000/usuario/perfil");
+        const { nombre, apellido, email, dui } = response.data;
         setUserData({
             nombre: nombre,
             apellido: apellido,
-            correo: correo,
+            email: email,
             dui: dui
         });
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            alert("Error al obtener los datos del perfil: " + error);
-            console.log("Error al obtener los datos del perfil: " + error)
+            alert("Error al obtener los datos del perfil, axios error: " + error);
         } else {
             alert("Error al obtener datos del perfil: " + error);
-            console.log("Error al obtener los datos del perfil: " + error)
         }
         setError("Error al obtener los datos del perfil.");
     }
@@ -41,7 +39,7 @@ const ViewProfileScreen = () => {
     const [userData, setUserData] = useState<IUserData>({
         nombre: '',
         apellido: '',
-        correo: '',
+        email: '',
         dui: '',
     });
     const [error, setError] = useState<string>('');
@@ -73,7 +71,7 @@ const ViewProfileScreen = () => {
                     </div>
                     <div>
                         <label className="block">Correo Electrónico:</label>
-                        <input type="email" name="correo" disabled value={userData.correo} />
+                        <input type="email" name="email" disabled value={userData.email} />
                     </div>
                     <div>
                         <label className="block">Documento de Identidad:</label>
