@@ -1,6 +1,7 @@
 'use client'
-import axios from "axios"
 import React, { useEffect, useState } from "react"
+import axios from "axios";
+import customAxios from "@/utils/customAxios";
 import { retrieveAuthentication } from "@/utils/authentication";
 
 interface IUserData {
@@ -10,13 +11,13 @@ interface IUserData {
     dui: string;
 }
 
-const fetchData = async (setUserData: React.Dispatch<React.SetStateAction<IUserData>>, setError: React.Dispatch<React.SetStateAction<string>>, token: string) => {
+const fetchData = async (
+    setUserData: React.Dispatch<React.SetStateAction<IUserData>>,
+    setError: React.Dispatch<React.SetStateAction<string>>,
+    token: string
+) => {
     try {
-        const response = await axios.get<IUserData>("/usuario/perfil", {
-            headers: {
-                Authorization: `Bearer ${token}`                     
-            }
-        });
+        const response = await customAxios.get<IUserData>("/usuario/perfil");
         const { nombre, apellido, correo, dui } = response.data;
         setUserData({
             nombre: nombre,
@@ -26,11 +27,13 @@ const fetchData = async (setUserData: React.Dispatch<React.SetStateAction<IUserD
         });
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            setError("Error al obtener los datos del perfil.");
+            alert("Error al obtener los datos del perfil: " + error);
+            console.log("Error al obtener los datos del perfil: " + error)
+        } else {
+            alert("Error al obtener datos del perfil: " + error);
+            console.log("Error al obtener los datos del perfil: " + error)
         }
-        else {
-            console.error("Error al obtener datos del perfil:", error);
-        }
+        setError("Error al obtener los datos del perfil.");
     }
 };
 
