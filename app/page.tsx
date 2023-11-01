@@ -1,3 +1,5 @@
+'use client'
+import Pagination from '@/components/Pagination'
 import Image from 'next/image'
 
 
@@ -15,6 +17,8 @@ export default function Home() {
         <button className=' boton-guardar'>Guardar</button>
         
         <button className='boton-editar'>Editar</button>
+
+        <Pagination currentPage={7} totalPages={20} onClick={(newPage) => alert(newPage)}/>
       </div>
     </main>
   )
