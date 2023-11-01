@@ -1,7 +1,7 @@
 'use client'
 import axios from "axios"
 import React, { useEffect, useState } from "react"
-import { retrieveAuthentication } from "@/utils/authentication"; // Asegúrate de importar tu función retrieveAuthentication
+import { retrieveAuthentication } from "@/utils/authentication";
 
 interface IUserData {
     nombre: string;
