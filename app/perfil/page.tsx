@@ -43,6 +43,27 @@ const ViewProfileScreen = () => {
         dui: '',
     });
     const [error, setError] = useState<string>('');
+    const [editMode, setEditMode] = useState<boolean>(false);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData({
+            ...userData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await customAxios.put("http://localhost:8000/usuario/perfil", userData);
+            // Actualizar los datos del usuario con la respuesta del servidor
+            setUserData(response.data);
+            setEditMode(false);
+        } catch (error) {
+            setError("Error al actualizar el perfil.");
+        }
+    };
+
+    
 
     useEffect(() => {
         const authentication = retrieveAuthentication();
