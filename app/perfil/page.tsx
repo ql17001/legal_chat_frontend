@@ -42,6 +42,14 @@ const ViewProfileScreen = () => {
         email: '',
         dui: '',
     });
+    
+    const [originalData, setOriginalData] = useState<IUserData>({
+        nombre: '',
+        apellido: '',
+        email: '',
+        dui: '',
+    });
+
     const [error, setError] = useState<string>('');
     const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -63,7 +71,7 @@ const ViewProfileScreen = () => {
         }
     };
 
-    
+
 
     useEffect(() => {
         const authentication = retrieveAuthentication();
@@ -84,22 +92,36 @@ const ViewProfileScreen = () => {
                 <div className="grid grid-cols-2 grid-rows-3 gap-y-4 gap-x-20">
                     <div>
                         <label className="block">Nombre:</label>
-                        <input type="text" name="nombre " disabled value={userData.nombre} />
+                        <input type="text" name="nombre " disabled={!editMode} value={userData.nombre} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Apellido:</label>
-                        <input type="text" name="apellido" disabled value={userData.apellido} />
+                        <input type="text" name="apellido" disabled={!editMode} value={userData.apellido} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Correo Electrónico:</label>
-                        <input type="email" name="email" disabled value={userData.email} />
+                        <input type="email" name="email" disabled={!editMode} value={userData.email} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Documento de Identidad:</label>
-                        <input type="text" name="documento" disabled value={userData.dui} />
+                        <input type="text" name="documento" disabled={!editMode} value={userData.dui} onChange={handleInputChange} />
                     </div>
                     <div className="col-span-2 flex gap-x-4 place-self-end ">
-                        <button>Editar</button>
+                        {
+                            editMode ? (
+                                <>
+                                <button onClick={handleSubmit}>Guardar</button>
+                                <button onClick={() => {
+
+                                    setUserData(originalData);
+                                    setEditMode(false);
+
+                                }}>Cancelar</button>
+                                </>
+                            ) : (
+                                <button onClick={() => setEditMode(true)}>Editar</button>
+                            )
+                        }
                         <button>Cambiar Contraseña</button>
                     </div>
                 </div>
