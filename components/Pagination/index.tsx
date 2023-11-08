@@ -32,7 +32,7 @@ const Pagination = ({ currentPage, totalPages, onClick }:IProperties) => {
   };
 
   return (
-    <section className="flex flex-row border border-black/10 rounded-md overflow-hidden">
+    totalPages > 1 && <section className="flex flex-row border border-black/10 rounded-md overflow-hidden w-fit">
       {getPagesToRender().map((page, index) => {
         const handleOnClick = () => {
           onClick(page);
