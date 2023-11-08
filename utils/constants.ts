@@ -5,7 +5,9 @@ export enum Routes {
     USUARIOS = '/usuarios',
     REGISTRARSE = '/registrarme',
     VER_PERFIL = '/perfil',
-    LOGIN = '/iniciar-sesion'
+    LOGIN = '/iniciar-sesion',
+    ASESORIAS_SIN_ASESOR = '/asesorias-sin-asesor'
+
 
 
 
