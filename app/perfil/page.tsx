@@ -13,12 +13,10 @@ interface IUserData {
 
 const fetchData = async (
     setUserData: React.Dispatch<React.SetStateAction<IUserData>>,
-    setOriginalData: React.Dispatch<React.SetStateAction<IUserData>>,
-    setError: React.Dispatch<React.SetStateAction<string>>,
-    token: string
+    setOriginalData: React.Dispatch<React.SetStateAction<IUserData>>
 ) => {
     try {
-        const response = await customAxios.get<IUserData>("http://localhost:8000/usuario/perfil");
+        const response = await customAxios.get<IUserData>("/usuario/perfil");
         const { nombre, apellido, email, dui } = response.data;
         setUserData({
             nombre: nombre,
@@ -38,7 +36,7 @@ const fetchData = async (
         } else {
             alert("Error al obtener datos del perfil: " + error);
         }
-        setError("Error al obtener los datos del perfil.");
+        alert("Error al obtener los datos del perfil.");
     }
 };
 
@@ -57,7 +55,6 @@ const ViewProfileScreen = () => {
         dui: '',
     });
 
-    const [error, setError] = useState<string>('');
     const [editMode, setEditMode] = useState<boolean>(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,13 +66,18 @@ const ViewProfileScreen = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await customAxios.put("http://localhost:8000/perfil", userData);
+            const response = await customAxios.put("/usuario/actualizar-informacion", userData, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              }
+            });
             // Actualizar los datos del usuario con la respuesta del servidor
             setUserData(response.data);
             setOriginalData(response.data); 
             setEditMode(false);
+            alert('Se actualizo la informacion de perfil.')
         } catch (error) {
-            setError("Error al actualizar el perfil.");
+            alert("Error al actualizar el perfil.");
         }
     };
 
@@ -84,9 +86,9 @@ const ViewProfileScreen = () => {
     useEffect(() => {
         const authentication = retrieveAuthentication();
         if (authentication) {
-            fetchData(setUserData, setOriginalData, setError, authentication.token);
+            fetchData(setUserData, setOriginalData);
         } else {
-            setError('No se pudo obtener el token de autenticación.');
+            alert('No se pudo obtener el token de autenticación.');
         }
     }, []);
 
