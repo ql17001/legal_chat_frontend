@@ -69,9 +69,10 @@ const ViewProfileScreen = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await customAxios.put("http://localhost:8000/usuario/perfil", userData);
+            const response = await customAxios.put("http://localhost:8000/perfil", userData);
             // Actualizar los datos del usuario con la respuesta del servidor
             setUserData(response.data);
+            setOriginalData(response.data); 
             setEditMode(false);
         } catch (error) {
             setError("Error al actualizar el perfil.");
@@ -99,7 +100,7 @@ const ViewProfileScreen = () => {
                 <div className="grid grid-cols-2 grid-rows-3 gap-y-4 gap-x-20">
                     <div>
                         <label className="block">Nombre:</label>
-                        <input type="text" name="nombre " disabled={!editMode} value={userData.nombre} onChange={handleInputChange} />
+                        <input type="text" name="nombre" disabled={!editMode} value={userData.nombre} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Apellido:</label>
@@ -111,7 +112,7 @@ const ViewProfileScreen = () => {
                     </div>
                     <div>
                         <label className="block">Documento de Identidad:</label>
-                        <input type="text" name="documento" disabled={!editMode} value={userData.dui} onChange={handleInputChange} />
+                        <input type="text" name="dui" disabled={!editMode} value={userData.dui} onChange={handleInputChange} />
                     </div>
                     <div className="col-span-2 flex gap-x-4 place-self-end ">
                         {
