@@ -1,6 +1,7 @@
 "use client";
 import React, { ChangeEvent,useState } from 'react';
 import axios, { isAxiosError } from "axios";
+import customAxios from "@/utils/customAxios";
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,14 +15,15 @@ interface ISolicitarAsesoriaResponse {
 function Modal({ isOpen, onClose }: ModalProps) {
     const [tema, setTema] = useState("");
 
-    const handleTemaOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleTemaOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setTema(event.currentTarget.value);
     };
   
     const SolicitarAsesoria = async () => {
         try {
-            const response = await axios.post<ISolicitarAsesoriaResponse>(
-                "localhost:8000/asesorias/solicitar",
+          
+            const response = await customAxios.post<ISolicitarAsesoriaResponse>(
+                "/asesorias/solicitar",
                 {
                     nombre: tema,
                 },
@@ -44,7 +46,7 @@ function Modal({ isOpen, onClose }: ModalProps) {
           </div>
           <div className='py-7 text-left'>
             <h4>Tema de que necesita la asesoria:</h4>
-            <input onChange={handleTemaOnChange} className='py-10 px-20 '></input>
+            <textarea onChange={handleTemaOnChange} rows={5} cols={50}></textarea>
           </div>
           <div className='flex justify-end gap-x-4 place-self-end'>
             <button className='boton-error' onClick={onClose}>Cancelar</button>

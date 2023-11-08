@@ -1,4 +1,5 @@
-import Modal from "../Modal"
+"use client";
+import Modal from "../ModalSolicitarAsesoria"
 import React, { useState } from 'react';
 
 
