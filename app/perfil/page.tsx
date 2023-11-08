@@ -13,6 +13,7 @@ interface IUserData {
 
 const fetchData = async (
     setUserData: React.Dispatch<React.SetStateAction<IUserData>>,
+    setOriginalData: React.Dispatch<React.SetStateAction<IUserData>>,
     setError: React.Dispatch<React.SetStateAction<string>>,
     token: string
 ) => {
@@ -20,6 +21,12 @@ const fetchData = async (
         const response = await customAxios.get<IUserData>("http://localhost:8000/usuario/perfil");
         const { nombre, apellido, email, dui } = response.data;
         setUserData({
+            nombre: nombre,
+            apellido: apellido,
+            email: email,
+            dui: dui
+        });
+        setOriginalData({
             nombre: nombre,
             apellido: apellido,
             email: email,
@@ -76,7 +83,7 @@ const ViewProfileScreen = () => {
     useEffect(() => {
         const authentication = retrieveAuthentication();
         if (authentication) {
-            fetchData(setUserData, setError, authentication.token);
+            fetchData(setUserData, setOriginalData, setError, authentication.token);
         } else {
             setError('No se pudo obtener el token de autenticación.');
         }
