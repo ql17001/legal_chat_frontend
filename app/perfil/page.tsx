@@ -13,13 +13,18 @@ interface IUserData {
 
 const fetchData = async (
     setUserData: React.Dispatch<React.SetStateAction<IUserData>>,
-    setError: React.Dispatch<React.SetStateAction<string>>,
-    token: string
+    setOriginalData: React.Dispatch<React.SetStateAction<IUserData>>
 ) => {
     try {
-        const response = await customAxios.get<IUserData>("http://localhost:8000/usuario/perfil");
+        const response = await customAxios.get<IUserData>("/usuario/perfil");
         const { nombre, apellido, email, dui } = response.data;
         setUserData({
+            nombre: nombre,
+            apellido: apellido,
+            email: email,
+            dui: dui
+        });
+        setOriginalData({
             nombre: nombre,
             apellido: apellido,
             email: email,
@@ -31,7 +36,7 @@ const fetchData = async (
         } else {
             alert("Error al obtener datos del perfil: " + error);
         }
-        setError("Error al obtener los datos del perfil.");
+        alert("Error al obtener los datos del perfil.");
     }
 };
 
@@ -42,14 +47,48 @@ const ViewProfileScreen = () => {
         email: '',
         dui: '',
     });
-    const [error, setError] = useState<string>('');
+    
+    const [originalData, setOriginalData] = useState<IUserData>({
+        nombre: '',
+        apellido: '',
+        email: '',
+        dui: '',
+    });
+
+    const [editMode, setEditMode] = useState<boolean>(false);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData({
+            ...userData,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await customAxios.put("/usuario/actualizar-informacion", userData, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              }
+            });
+            // Actualizar los datos del usuario con la respuesta del servidor
+            setUserData(response.data);
+            setOriginalData(response.data); 
+            setEditMode(false);
+            alert('Se actualizo la informacion de perfil.')
+        } catch (error) {
+            alert("Error al actualizar el perfil.");
+        }
+    };
+
+
 
     useEffect(() => {
         const authentication = retrieveAuthentication();
         if (authentication) {
-            fetchData(setUserData, setError, authentication.token);
+            fetchData(setUserData, setOriginalData);
         } else {
-            setError('No se pudo obtener el token de autenticación.');
+            alert('No se pudo obtener el token de autenticación.');
         }
     }, []);
 
@@ -63,22 +102,36 @@ const ViewProfileScreen = () => {
                 <div className="grid grid-cols-2 grid-rows-3 gap-y-4 gap-x-20">
                     <div>
                         <label className="block">Nombre:</label>
-                        <input type="text" name="nombre " disabled value={userData.nombre} />
+                        <input type="text" name="nombre" disabled={!editMode} value={userData.nombre} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Apellido:</label>
-                        <input type="text" name="apellido" disabled value={userData.apellido} />
+                        <input type="text" name="apellido" disabled={!editMode} value={userData.apellido} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Correo Electrónico:</label>
-                        <input type="email" name="email" disabled value={userData.email} />
+                        <input type="email" name="email" disabled={!editMode} value={userData.email} onChange={handleInputChange} />
                     </div>
                     <div>
                         <label className="block">Documento de Identidad:</label>
-                        <input type="text" name="documento" disabled value={userData.dui} />
+                        <input type="text" name="dui" disabled={!editMode} value={userData.dui} onChange={handleInputChange} />
                     </div>
                     <div className="col-span-2 flex gap-x-4 place-self-end ">
-                        <button>Editar</button>
+                        {
+                            editMode ? (
+                                <>
+                                <button onClick={handleSubmit}>Guardar</button>
+                                <button onClick={() => {
+
+                                    setUserData(originalData);
+                                    setEditMode(false);
+
+                                }}>Cancelar</button>
+                                </>
+                            ) : (
+                                <button onClick={() => setEditMode(true)}>Editar</button>
+                            )
+                        }
                         <button>Cambiar Contraseña</button>
                     </div>
                 </div>
