@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  input, textarea {
+
+  input,
+  textarea {
     @apply border border-black rounded-md p-1;
   }
 
@@ -14,16 +16,20 @@
   h1 {
     @apply text-2xl;
   }
+
   h2 {
     @apply text-xl;
   }
+
   h3 {
     @apply text-lg;
   }
-  h4{
+
+  h4 {
     @apply text-base;
   }
-  h5{
+
+  h5 {
     @apply text-sm;
   }
 }
