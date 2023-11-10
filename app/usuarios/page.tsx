@@ -55,6 +55,8 @@ const UserTable: React.FC = () => {
   };
 
   const handleDeleteUser = (userId: number) => {
+    if (window.confirm('¿Está seguro que desea eliminar el usuario?') === false) return;
+
     customAxios.delete(`/usuario/${userId}`)
       .then(() => {
         // Actualizar la lista de usuarios después de la eliminación
