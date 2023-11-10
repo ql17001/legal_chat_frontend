@@ -60,9 +60,11 @@ const UserTable: React.FC = () => {
     customAxios.delete(`/usuario/${userId}`)
       .then(() => {
         loadUserData();
+        window.alert('Usuario eliminado con éxito.');
       })
       .catch((error) => {
         console.error('Error deleting user:', error);
+        window.alert('No fue posible eliminar el usuario.');
       });
   };
 
