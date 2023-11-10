@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState, useEffect } from "react";
@@ -30,7 +30,7 @@ const UserTable: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [filter, setFilter] = useState<number>();
 
-  const loadUserData = () => {
+  const loadUserData = useCallback(() => {
     customAxios.get<IResponse>(`/usuario?page=${currentPage}${filter == undefined ? '' : `&activo=${filter}`}`)
       .then((response) => {
         setUsers(response.data.data.usuarios);
@@ -39,11 +39,11 @@ const UserTable: React.FC = () => {
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
-  };
+  }, [currentPage, filter]);
 
   useEffect(() => {
     loadUserData();
-  }, [currentPage, filter]);
+  }, [currentPage, filter, loadUserData]);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
