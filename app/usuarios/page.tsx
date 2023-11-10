@@ -30,12 +30,8 @@ const UserTable: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [filter, setFilter] = useState<number>();
 
-  useEffect(() => {
-    customAxios
-      .get<IResponse>(
-        `/usuario?page=${currentPage}${filter == undefined ? '' : `&activo=${filter}`
-        }`
-      )
+  const loadUserData = () => {
+    customAxios.get<IResponse>(`/usuario?page=${currentPage}${filter == undefined ? '' : `&activo=${filter}`}`)
       .then((response) => {
         setUsers(response.data.data.usuarios);
         setTotalPages(response.data.data.totalPages);
@@ -43,6 +39,10 @@ const UserTable: React.FC = () => {
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
+  };
+
+  useEffect(() => {
+    loadUserData();
   }, [currentPage, filter]);
 
   const paginate = (pageNumber: number) => {
@@ -59,8 +59,7 @@ const UserTable: React.FC = () => {
 
     customAxios.delete(`/usuario/${userId}`)
       .then(() => {
-        // Actualizar la lista de usuarios después de la eliminación
-        setUsers(users.filter(user => user.id !== userId));
+        loadUserData();
       })
       .catch((error) => {
         console.error('Error deleting user:', error);
