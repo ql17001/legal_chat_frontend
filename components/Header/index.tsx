@@ -36,6 +36,7 @@ const Header = () => {
             {(role==='Asesor'||role==='Cliente') && <Link href={Routes.CHATS} className='text-sm px-2'>Chats</Link>}
             {(role==='Administrador') && <Link href={Routes.USUARIOS} className='text-sm px-2'>Usuarios</Link>}
             {(role==='Administrador'|| role==='Asesor') && <Link href={Routes.ASESORIAS}  className='text-sm px-2'>Asesorías</Link>}
+            {(role==='Administrador'|| role==='Asesor') && <Link href={Routes.ASESORIAS_SIN_ASESOR}  className='text-sm px-2'>Asesorías sin asesor</Link>}
             {(role==='Administrador'|| role==='Asesor'||role==='Cliente') && <Link href={Routes.VER_PERFIL} className='text-sm px-2'>Ver perfil</Link>}
             {(role==='Administrador'|| role==='Asesor'||role==='Cliente') && <button onClick={onClickLogout} className='bg-transparent text-sm px-2 pr-10'>Cerrar sesión</button>}
             </div>
