@@ -7,7 +7,7 @@ import { ChangeEvent, useState, useEffect } from "react";
 import customAxios from "@/utils/customAxios";
 import Pagination from "@/components/Pagination";
 
-interface IUser {
+export interface IUser {
   id: number;
   nombre: string;
   apellido: string;
