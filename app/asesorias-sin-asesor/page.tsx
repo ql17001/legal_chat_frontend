@@ -33,7 +33,7 @@ const AsesoriaTable: React.FC = () => {
       .then((response) => {
         const responseData = response.data["0"];
         setAsesorias(responseData.data);
-        setTotalPages(responseData.totalPages);
+        setTotalPages(response.data.lastPage);
       })
       .catch((error) => {
         console.error('Error fetching asesorias:', error);
