@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent } from "react";
-import { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
 
 interface UserIUserFormProperties {
@@ -23,7 +22,8 @@ interface IUpdateUsuarioResponse {
 }
 
 
-const UserForm = () =>{
+const UserForm = (properties:UserIUserFormProperties) =>{
+  const {id} = properties;
 const router = useRouter();
 const [firstName, setFirstName] = useState("");
 const [email, setEmail] = useState("");
@@ -85,6 +85,18 @@ const handleFirstNameOnChange = (event: ChangeEvent<HTMLInputElement>) => {
       }
     }
   }
+
+const handleGuardarOnClick = () =>{
+  if(id == undefined){
+    createUsuario();
+  }else{
+    updateUsuario();
+  }
+  
+
+
+}
+  
 
   const updateUsuario = async () => {
     try {
@@ -173,8 +185,8 @@ const handleFirstNameOnChange = (event: ChangeEvent<HTMLInputElement>) => {
           </select>
       </div>
       <div className="col-span-4 flex flex-row justify-center items-center">
-      <button className="boton-default bg-green-400">Guardar</button>
-      <button className="boton-default bg-red-400">Cancelar</button>
+      <button className="boton-default bg-green-400" onClick={handleGuardarOnClick}>Guardar</button>
+      <button className="boton-default bg-red-400" onClick={() => router.push('./nuevo')}>Cancelar</button>
       </div>
     </div>
   </div>
