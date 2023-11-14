@@ -48,8 +48,20 @@ const AsesoriaTable: React.FC = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleAsesoria = (asesoriaId: number) => {
-    window.alert('Boton tomar Asesoria.');
+  const handleAsesoria = async (asesoriaId: number) => {
+    const confirmationUser = window.confirm('¿Seguro que desea tomar la asesoría?');
+    
+    if (confirmationUser) {
+      try {
+        const response = await customAxios.post(`/asesoria/tomar-asesoria`);
+        console.log('Asesoría tomada con éxito:', response.data);
+        alert('Asesoría tomada con éxito.');
+        loadAsesoriaData();
+      } catch (error) {
+        console.error('Error al tomar la asesoría:', error);
+        window.alert('Ocurrió un error. ' + error);
+      }
+    }
   };
 
     return (
