@@ -77,6 +77,28 @@
     text-align: center;
   }
 
+  .loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: black ;
+
+  }
+  .loading-content {
+    background-color: royalblue;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+  }
+
   .boton-default-asesoria {
     @apply bg-theme-blue px-2 py-1 rounded-md text-white;
     width: 130px;
