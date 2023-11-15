@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  input, textarea {
+
+  input,
+  textarea {
     @apply border border-black rounded-md p-1;
   }
 
@@ -14,16 +16,20 @@
   h1 {
     @apply text-2xl;
   }
+
   h2 {
     @apply text-xl;
   }
+
   h3 {
     @apply text-lg;
   }
-  h4{
+
+  h4 {
     @apply text-base;
   }
-  h5{
+
+  h5 {
     @apply text-sm;
   }
 }
@@ -44,6 +50,11 @@
   .boton-editar {
     @apply boton-default bg-theme-orange;
   }
+
+  .boton-eliminar {
+    @apply boton-default bg-theme-red;
+  }
+
   .modal {
     display: none;
     position: fixed;
@@ -57,6 +68,7 @@
     align-items: center;
     justify-content: center;
   }
+
   .modal-content {
     background-color: #fff;
     padding: 20px;
@@ -64,6 +76,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
   }
+
   .loading {
     display: none;
     position: fixed;
@@ -84,5 +97,11 @@
     border-radius: 5px;
     text-align: center;
     color: white;
+  }
+
+  .boton-default-asesoria {
+    @apply bg-theme-blue px-2 py-1 rounded-md text-white;
+    width: 130px;
+    height: 40px;
   }
 }
