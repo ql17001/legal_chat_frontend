@@ -14,7 +14,7 @@ function Loading({ isOpen }: LoadingProps) {
 
   return (
     LoadingOpen && (
-      <div className="loading ">
+      <div className="loading backdrop-blur-sm">
         <div className="loading-content px-[125px] py-7">
           <div>
             <div className="animate-spin inline-block w-10 h-10 border-[3px]  border-t-transparent text-gray-400 rounded-full" role="status" aria-label="loading">
