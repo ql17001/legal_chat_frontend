@@ -2,10 +2,12 @@
 
 import React, { useCallback } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, useState, useEffect } from "react";
 import customAxios from "@/utils/customAxios";
 import Pagination from "@/components/Pagination";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/utils/constants";
+
 
 export interface IUser {
   id: number;
@@ -25,6 +27,7 @@ interface IResponse {
 }
 
 const UserTable: React.FC = () => {
+  const router = useRouter();
   const [users, setUsers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -50,7 +53,8 @@ const UserTable: React.FC = () => {
   };
 
   const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(Number(e.currentTarget.value));
+    const value = e.currentTarget.value;
+    setFilter(value === 'Todos' ? undefined : Number(value));
     setCurrentPage(1);
   };
 
@@ -68,6 +72,14 @@ const UserTable: React.FC = () => {
       });
   };
 
+  const redirigirNuevoUsuario = () => {
+   router.push('/usuarios/nuevo');
+  }
+
+  const handleEditarUsuario = async (IdUsuario: number) : Promise<void>=> {
+    await router.push(`/usuarios/${IdUsuario}`);
+  }
+
   return (
     <div>
       <div className="w-full flex flex-row justify-between mb-2">
@@ -76,7 +88,7 @@ const UserTable: React.FC = () => {
           <option value={1}>Activos</option>
           <option value={0}>Inactivos</option>
         </select>
-        <button className="boton-guardar">
+        <button className="boton-guardar" onClick={redirigirNuevoUsuario}>
           Nuevo usuario
         </button>
       </div>
@@ -99,7 +111,7 @@ const UserTable: React.FC = () => {
               <td className="border px-4 py-2">{user.rol}</td>
               <td className="border px-4 py-2">
                 <div className="flex flex-row justify-center gap-2">
-                  <button className="boton-editar">Editar</button>
+                  <button className="boton-editar" onClick={() =>handleEditarUsuario(user.id)}>Editar</button>
                   <button className="boton-eliminar" onClick={() => handleDeleteUser(user.id)}>Eliminar</button>
                 </div>
               </td>
