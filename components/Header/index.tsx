@@ -31,7 +31,6 @@ const Header = () => {
 
             <div className="flex flex-row items-center pr-20">
             {role== undefined && <Link href={Routes.REGISTRARSE} className='text-sm px-2'>Registrarse</Link>} 
-
             {(role==='Administrador'|| role==='Asesor'||role==='Cliente') && <Link href={Routes.HOME} className='text-sm px-2'>Inicio</Link>}
             {(role==='Asesor'||role==='Cliente') && <Link href={Routes.CHATS} className='text-sm px-2'>Chats</Link>}
             {(role==='Administrador') && <Link href={Routes.USUARIOS} className='text-sm px-2'>Usuarios</Link>}
