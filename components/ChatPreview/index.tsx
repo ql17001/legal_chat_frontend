@@ -15,7 +15,7 @@ const ChatPreview: React.FC<IChatPreviewData> = ({ idChat, nombreAsesoria , ulti
 
   return (
     <div key={idChat}>
-        <div className="bg-white p-2  border border-black m-2 w-90">
+        <div className="bg-white p-2  border border-black m-2 w-90 hover:bg-gray-400/10">
             <span className='font-bold'>{nombreAsesoria}</span>
             <div className="border-t border-black m-2"></div>
             <div className="flex justify-between">
