@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
+import customAxios from "@/utils/customAxios";
+import { Routes } from "@/utils/constants";
 
 interface UserIUserFormProperties {
     id?: number;
@@ -8,6 +10,17 @@ interface UserIUserFormProperties {
 
 interface ICreateUsuarioResponse {
   message: string;
+}
+
+interface ILoadUsuarioResponse {
+  message: string;
+  data: {
+    nombre: string;
+    apellido: string;
+    email: string;
+    dui: string;
+    rol: 'Asesor' | 'Administrador' | 'Cliente';
+  }
 }
 
 interface IUsuarioEntity {
@@ -31,7 +44,7 @@ const [lastName, setLastName] = useState("");
 const [DUI, setDUI] = useState("");
 const [password, setPassword] = useState("");
 const [confirmedPassword, setConfirmedPassword] = useState("");
-const [role, setRole] = useState<string>("Client");
+const [role, setRole] = useState<string>("Cliente");
 
 const handleFirstNameOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFirstName(event.currentTarget.value);
@@ -60,77 +73,136 @@ const handleFirstNameOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     }
   };
 
+  const validarDatos = () => {
+    const errores:string[] = [];
+
+    if(confirmedPassword === '' || password === '' || password !== confirmedPassword){
+      errores.push('Se debe especificar una contraseña y/o la contraseña debe ser igual a la confirmacion de la contraseña.');
+    }
+
+    if(firstName === ''){
+      errores.push('Se debe especificar un nombre.');
+    }
+
+    if(lastName === ''){
+      errores.push('Se debe especificar un apellido.');
+    }
+
+    if(email === ''){
+      errores.push('Se debe especificar un correo electronico.');
+    }
+
+    if(DUI === '' || DUI.length !== 9){
+      errores.push('Se debe especificar un Documento Unico de Identidad y/o debe ser un numero sin guion de 9 digitos.');
+    }
+
+    return errores;
+  }
+
   const createUsuario = async () => {
     try {
-      const response = await axios.post<ICreateUsuarioResponse>('/usuario', {
-        nombre: {firstName},
-        apellido:{lastName},
-        email:{email},
-        dui:{DUI},
-        password:{password},
-        passwordConfirmado:{confirmedPassword},
-        rol:{role}
+      await customAxios.post<ICreateUsuarioResponse>('/usuario/crear', {
+        nombre: firstName,
+        apellido:lastName,
+        email:email,
+        dui:DUI,
+        password:password,
+        roles:JSON.stringify([role])
       },
       {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       });
-      console.log(response.data.message)
+
+      alert('Se creo el usuario con exito.')
+      
+      router.push(Routes.USUARIOS);
     } catch (error) {
       if(isAxiosError(error)){
-        console.log('Error de axios', error)
+        alert('Error al procesar la peticion: ' + error.response?.data)
       }else{
-        console.log('Otro error', error)
+        alert('Ocurrio un error que impidio realizar la peticion: ' + error)
       }
     }
   }
 
 const handleGuardarOnClick = () =>{
-  if(id == undefined){
-    createUsuario();
+  const errores = validarDatos()
+  if(errores.length === 0){
+    if(id == undefined){
+      createUsuario();
+    }else{
+      updateUsuario();
+    }
   }else{
-    updateUsuario();
+    alert(`Se deben solventar los siguientes errores: ${errores.reduce((previousString, currentString) => {
+      const newString = `${previousString} ${currentString}`;
+      return newString;
+    })}`);
   }
-  
-
-
 }
   
 
   const updateUsuario = async () => {
     try {
-      const response = await axios.put<IUpdateUsuarioResponse>('/usuario/1', {
-        nombre: {firstName},
-        apellido:{lastName},
-        email:{email},
-        dui:{DUI},
-        password:{password},
-        passwordConfirmado:{confirmedPassword},
-        rol:{role}
+      await customAxios.put<IUpdateUsuarioResponse>(`/usuario/${id}`, {
+        nombre: firstName,
+        apellido:lastName,
+        email:email,
+        dui:DUI,
+        password:password,
+        passwordConfirmado:confirmedPassword,
+        roles:JSON.stringify([role])
       },
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
       });
-      console.log('Message:', response.data.message)
+      
+      alert('Se actualizaron los datos del usuario con exito.')
 
-      console.log('Data:', response.data.data)
+      router.push(Routes.USUARIOS);
     } catch (error) {
       if(isAxiosError(error)){
-        console.log('Error de axios', error)
+        alert('Error al procesar la peticion: ' + error.response?.data)
       }else{
-        console.log('Otro error', error)
+        alert('Ocurrio un error que impidio realizar la peticion: ' + error)
       }
     }
   }
+
+  useEffect(() => {
+    const loadUsuario = async () => {
+      try {
+        const response = await customAxios.get<ILoadUsuarioResponse>(`/usuario/${id}`);
+        const { data } = response.data;
+        setDUI(data.dui);
+        setFirstName(data.nombre);
+        setLastName(data.apellido);
+        setRole(data.rol);
+        setEmail(data.email)
+      } catch (error) {
+        if(isAxiosError(error)){
+          alert(`Ocurrio un error en la peticion: ${error.message}`);
+        }else{
+          alert('Ocurrio un error que impidio cargar los datos del usuario.');
+        }
+      }
+    }
+
+    if(id != undefined){
+      loadUsuario();
+    }
+  }, [id])
+  
 
   return (
     <div className="px-[125px] py-14 w-auto h-auto">
     <div className="px-[10px] py-6 grid grid-cols-4 gap-x-8 gap-y-6">
       <div className="text-center col-span-4 font-bold">
-        <h1>Crear/Editar usuario</h1>
+        <h1>{`${id == undefined ? 'Creando ' : 'Editando '}`}usuario</h1>
       </div>
       <div className="col-span-2 flex flex-col">
         <label>Nombre</label>
@@ -184,7 +256,7 @@ const handleGuardarOnClick = () =>{
           <option value='Asesor'>Asesor</option>
           </select>
       </div>
-      <div className="col-span-4 flex flex-row justify-center items-center">
+      <div className="col-span-4 flex flex-row justify-center items-center gap-2">
       <button className="boton-default bg-green-400" onClick={handleGuardarOnClick}>Guardar</button>
       <button className="boton-default bg-red-400" onClick={() => router.push('./nuevo')}>Cancelar</button>
       </div>
