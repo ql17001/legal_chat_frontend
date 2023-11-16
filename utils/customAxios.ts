@@ -11,7 +11,7 @@ customAxios.interceptors.request.use(
 
     if(authentication){
       const {token} = authentication;
-      console.log('token', token)
+      
       config.headers['Authorization'] = `Bearer ${token}`;
     }
 
