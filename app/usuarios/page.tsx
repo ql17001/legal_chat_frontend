@@ -53,7 +53,8 @@ const UserTable: React.FC = () => {
   };
 
   const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(Number(e.currentTarget.value));
+    const value = e.currentTarget.value;
+    setFilter(value === 'Todos' ? undefined : Number(value));
     setCurrentPage(1);
   };
 
