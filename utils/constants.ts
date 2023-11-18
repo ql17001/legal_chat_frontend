@@ -6,9 +6,6 @@ export enum Routes {
     REGISTRARSE = '/registrarme',
     VER_PERFIL = '/perfil',
     LOGIN = '/iniciar-sesion',
-    ASESORIAS_SIN_ASESOR = '/asesorias-sin-asesor'
-
-
-
-
+    ASESORIAS_SIN_ASESOR = '/asesorias-sin-asesor',
+    CAMBIAR_CONTRASENIA = '/cambiar-contrasenia',
 }
