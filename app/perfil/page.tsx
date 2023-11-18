@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react"
 import axios from "axios";
 import customAxios from "@/utils/customAxios";
 import { retrieveAuthentication } from "@/utils/authentication";
+import Link from "next/link";
+import { Routes } from "@/utils/constants";
 
 interface IUserData {
     nombre: string;
@@ -132,7 +134,7 @@ const ViewProfileScreen = () => {
                                 <button onClick={() => setEditMode(true)}>Editar</button>
                             )
                         }
-                        <button>Cambiar Contraseña</button>
+                        <Link href={Routes.CAMBIAR_CONTRASENIA} className="boton-default">Cambiar Contraseña</Link>
                     </div>
                 </div>
             </div>
