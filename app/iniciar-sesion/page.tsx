@@ -31,7 +31,7 @@ const LoginPage = () =>{
 
     const handleLogin = async () => {
       try {
-        const response = await axios.post<ILoginResponse, AxiosResponse<ILoginResponse>,ILoginBody>("http://localhost:8000/login",{
+        const response = await axios.post<ILoginResponse, AxiosResponse<ILoginResponse>,ILoginBody>(`${process.env.NEXT_PUBLIC_API}/api/login`,{
           username: email,
           password: password,
         },
