@@ -6,5 +6,5 @@ export enum Routes {
     REGISTRARSE = '/registrarme',
     VER_PERFIL = '/perfil',
     LOGIN = '/iniciar-sesion',
-    CAMBIAR_CONTRASENIA = '/cambiar_contrasenia'
+    CAMBIAR_CONTRASENIA = '/cambiar-contrasenia'
 }
