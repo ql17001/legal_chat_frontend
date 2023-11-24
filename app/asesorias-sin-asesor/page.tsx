@@ -53,7 +53,7 @@ const AsesoriaTable: React.FC = () => {
     
     if (confirmationUser) {
       try {
-        const response = await customAxios.post(`/asesoria/tomar-asesoria`);
+        const response = await customAxios.put(`/asesorias/tomar/${asesoriaId}`);
         console.log('Asesoría tomada con éxito:', response.data);
         alert('Asesoría tomada con éxito.');
         loadAsesoriaData();
