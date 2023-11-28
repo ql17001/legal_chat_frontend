@@ -1,7 +1,7 @@
 export enum Routes {
     HOME = '/',
     CHATS = '/chats',
-    ASESORIAS = '/asesorias',
+    ASESORIAS = '/consultar-asesorias',
     USUARIOS = '/usuarios',
     REGISTRARSE = '/registrarme',
     VER_PERFIL = '/perfil',
