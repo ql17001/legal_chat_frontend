@@ -35,22 +35,22 @@ const Chats = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchData = async () => {
-    try {
-      const response = await customAxios.get<IResponseData>(`/chats?page=${currentPage}`);
-      const datos:IResponseData = response.data;
-
-      setResponseData( datos);
-      setTotalPages(datos.totalPages);
-    } catch (error) {
-      alert('Error al cargar los chats');
-      // Manejar el error de manera adecuada
-    }
-  };
-
+  
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await customAxios.get<IResponseData>(`/chats?page=${currentPage}`);
+        const datos:IResponseData = response.data;
+  
+        setResponseData( datos);
+        setTotalPages(datos.totalPages);
+      } catch (error) {
+        alert('Error al cargar los chats');
+        // Manejar el error de manera adecuada
+      }
+    };
     fetchData();
-  },); 
+  },[currentPage]); 
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
