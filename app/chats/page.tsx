@@ -56,6 +56,20 @@ const Chats = () => {
     setCurrentPage(newPage);
   };
 
+  const handleFinalizarAsesoria = async (idChat: number) => {
+    try {
+      // Realizar una llamada a la API para finalizar la asesoria
+      await customAxios.post(`/chats/${idChat}/finalizar`);
+
+      // Actualizar la lista de chats excluyendo el chat finalizado
+      const updatedChats = responseData.data.chats.filter(chat => chat.idChat !== idChat);
+      setResponseData({ ...responseData, data: { chats: updatedChats } });
+    } catch (error) {
+      alert('Error al finalizar la asesoria');
+      // Manejar el error de manera adecuada
+    }
+  };
+
   return (
     <div className="text-center">
       <h1 className="font-bold">Chats</h1>
