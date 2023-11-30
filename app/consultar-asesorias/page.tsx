@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback } from "react";
+import React, { ChangeEvent, useCallback } from "react";
 import { useState, useEffect } from "react";
 import customAxios from "@/utils/customAxios";
 import Pagination from "@/components/Pagination";
@@ -42,6 +42,13 @@ const AsesoriaTableCompleta: React.FC = () => {
       });
   }, [currentPage,currentFilter]);
 
+  useEffect(
+    ()=>{
+      setCurrentPage(1);
+    },
+    [currentFilter]
+  )
+
   useEffect(() => {
     loadAsesoriaData();
   }, [currentPage, loadAsesoriaData]);
@@ -54,9 +61,7 @@ const AsesoriaTableCompleta: React.FC = () => {
     setCurrentFilter(filterSelected);
   };
 
-  const handleAsesoria = (asesoriaId: number) => {
-    window.alert('Boton tomar Asesoria.');
-  };
+  const handleFiltroOnChange = (e:ChangeEvent<HTMLSelectElement>) => onFilter(e.currentTarget.value);
 
   const obtenerEstado = (estado: string) => {
     if (estado === 's') {
@@ -74,7 +79,7 @@ const AsesoriaTableCompleta: React.FC = () => {
     <div>
       <div>
         <label>Filtro: </label><br></br>
-        <select onChange={(e) => onFilter(e.target.value)} value={currentFilter}>
+        <select onChange={handleFiltroOnChange} value={currentFilter}>
           <option value="all">Todos</option>
           <option value="s">Sin asesor</option>
           <option value="t">Terminada</option>
