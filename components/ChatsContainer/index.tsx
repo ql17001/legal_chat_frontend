@@ -17,7 +17,7 @@ const ChatItem = ({mensaje, mio}: IChatItemProperties) => {
       <div className='flex flex-col items-center text-[0.65rem] text-gray-400 justify-center'>
         <span>{dateString}</span><span>{timeString}</span>
       </div>
-      <div className={`border border-gray-200 p-2 rounded-lg ${mio ? ' rounded-br-none bg-theme-blue text-white' : 'rounded-bl-none'}`}>{mensaje.contenido}</div>
+      <div className={`border border-gray-200 p-2 break-words overflow-hidden rounded-lg ${mio ? ' rounded-br-none bg-theme-blue text-white' : 'rounded-bl-none'}`}>{mensaje.contenido}</div>
     </div>
   </div>
 }
