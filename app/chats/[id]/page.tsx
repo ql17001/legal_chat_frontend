@@ -3,7 +3,7 @@ import ChatsContainer from '@/components/ChatsContainer'
 import { IFecha, IMensaje } from '@/types/global';
 import { retrieveAuthentication } from '@/utils/authentication';
 import customAxios from '@/utils/customAxios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {EventSourcePolyfill} from 'event-source-polyfill';
 
 interface IProperties {
@@ -32,11 +32,41 @@ interface IChatResponse {
   }
 }
 
+interface IEnviarMensajeResponse {
+  message: string;
+}
+
 const ChatPage = ({params: {id}}:IProperties) => {
   const [messages, setMessages] = useState<IMensaje[]>([]);
   const [mercure, setMercure] = useState<IChatResponse['data']['mercure']>()
   const authentication = retrieveAuthentication();
-  const audioReference = useRef<HTMLAudioElement>(null)
+  const audioReference = useRef<HTMLAudioElement>(null);
+  const [message, setMessage] = useState('');
+
+  const handleMessageChange = (event:ChangeEvent<HTMLInputElement>) => {
+    if(event.currentTarget.value.length <= 255){
+      setMessage(event.currentTarget.value);
+    }
+  }
+
+  const handleEnviarClick = async () => {
+    if(message.length > 0){
+      try {
+        await customAxios.put(`/chats/${id}`, {
+          contenido: message
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        });
+
+        setMessage('');
+      } catch (error) {
+        alert('No fue posible enviar el mensaje.')
+      }
+    }
+  }
 
   useEffect(() => {
     const url = new URL('https://localhost/.well-known/mercure');
@@ -54,12 +84,10 @@ const ChatPage = ({params: {id}}:IProperties) => {
 
     es.onmessage = (event) => {
       const incomingMessage = JSON.parse(event.data) as IMensaje;
-      if(audioReference.current && incomingMessage.usuario.email !== authentication?.email){
+      if(audioReference.current && authentication?.email !== incomingMessage.usuario.email){
         audioReference.current.play();
-        console.log('Incoming message:', incomingMessage)
-        setMessages(previousMessages => [...previousMessages, incomingMessage])
       }
-      
+      setMessages(previousMessages => [...previousMessages, incomingMessage])
     }
   
     return () => {
@@ -92,8 +120,8 @@ const ChatPage = ({params: {id}}:IProperties) => {
       <audio ref={audioReference} src='/notification.wav' />
       <ChatsContainer mensajes={messages} usuarioActual={authentication ? authentication.email : ''}/>
       <div className='w-full flex flex-row gap-4'>
-        <input className='flex-1' type="text" name="" id="" />
-        <button>Enviar</button>
+        <input className='flex-1' type="text" value={message} onChange={handleMessageChange} />
+        <button onClick={handleEnviarClick}>Enviar</button>
       </div>
       <button>Terminar asesoria</button>
     </div>
