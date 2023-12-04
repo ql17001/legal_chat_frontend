@@ -5,6 +5,8 @@ import { retrieveAuthentication } from '@/utils/authentication';
 import customAxios from '@/utils/customAxios';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {EventSourcePolyfill} from 'event-source-polyfill';
+import { useRouter } from 'next/navigation';
+import { Routes } from '@/utils/constants';
 
 interface IProperties {
   params: {
@@ -16,6 +18,7 @@ interface IChatResponse {
   message: string;
   data: {
     asesoria: {
+      id: number;
       nombre: string;
       estado: 'e' | 't';
       fecha: IFecha;
@@ -46,7 +49,8 @@ const ChatPage = ({params: {id}}:IProperties) => {
   const authentication = retrieveAuthentication();
   const audioReference = useRef<HTMLAudioElement>(null);
   const [message, setMessage] = useState('');
-  const [asesoria, setAsesoria] = useState<IChatResponse['data']['asesoria']>()
+  const [asesoria, setAsesoria] = useState<IChatResponse['data']['asesoria']>();
+  const router = useRouter();
 
   const handleMessageChange = (event:ChangeEvent<HTMLInputElement>) => {
     if(event.currentTarget.value.length <= 255){
@@ -55,7 +59,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
   }
 
   const handleEnviarClick = async () => {
-    if(message.length > 0){
+    if(message.length > 0 && asesoria?.estado !== 't'){
       try {
         await customAxios.put(`/chats/${id}`, {
           contenido: message
@@ -69,6 +73,18 @@ const ChatPage = ({params: {id}}:IProperties) => {
         setMessage('');
       } catch (error) {
         alert('No fue posible enviar el mensaje.')
+      }
+    }
+  }
+
+  const handleTerminarClick = async () => {
+    if(confirm('¿Terminar asesoria? Una vez terminada no sera posible enviar mensajes.')){
+      try {
+        await customAxios.put(`/asesorias/terminar/${asesoria?.id}`);
+        alert('Se termino la asesoria.');
+        router.push(Routes.CHATS);
+      } catch (error) {
+        alert('Error al terminar la asesoria');
       }
     }
   }
@@ -112,7 +128,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
         setAsesoria(asesoria);
 
       } catch (error) {
-        
+        alert('No fue posible obtener la informacion del chat.')
       }
     }
   
@@ -125,11 +141,13 @@ const ChatPage = ({params: {id}}:IProperties) => {
       <h1>{`${asesoria?.cliente.nombre} ${asesoria?.cliente.apellido}: ${asesoria?.nombre}`}</h1>
       <audio ref={audioReference} src='/notification.wav' />
       <ChatsContainer mensajes={messages} usuarioActual={authentication ? authentication.email : ''}/>
-      <div className='w-full flex flex-row gap-4'>
-        <input className='flex-1' type="text" value={message} onChange={handleMessageChange} />
-        <button onClick={handleEnviarClick}>Enviar</button>
-      </div>
-      <button>Terminar asesoria</button>
+      {asesoria?.estado !== 't' && <>
+        <div className='w-full flex flex-row gap-4'>
+          <input className='flex-1' type="text" value={message} onChange={handleMessageChange} />
+          <button onClick={handleEnviarClick}>Enviar</button>
+        </div>
+        <button className='boton-error' onClick={handleTerminarClick}>Terminar asesoria</button>
+      </>}
     </div>
   )
 }
