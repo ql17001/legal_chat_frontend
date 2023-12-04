@@ -19,6 +19,10 @@ interface IChatResponse {
       nombre: string;
       estado: 'e' | 't';
       fecha: IFecha;
+      cliente: {
+        nombre: string;
+        apellido: string;
+      }
     },
     chat: {
       id: number;
@@ -42,6 +46,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
   const authentication = retrieveAuthentication();
   const audioReference = useRef<HTMLAudioElement>(null);
   const [message, setMessage] = useState('');
+  const [asesoria, setAsesoria] = useState<IChatResponse['data']['asesoria']>()
 
   const handleMessageChange = (event:ChangeEvent<HTMLInputElement>) => {
     if(event.currentTarget.value.length <= 255){
@@ -104,6 +109,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
 
         setMessages(mensajes)
         setMercure(mercure);
+        setAsesoria(asesoria);
 
       } catch (error) {
         
@@ -116,7 +122,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
 
   return (
     <div className='flex flex-col flex-1 items-center w-full max-w-xl m-auto p-8 gap-2'>
-      <h1>Usuario: Nombre asesoria</h1>
+      <h1>{`${asesoria?.cliente.nombre} ${asesoria?.cliente.apellido}: ${asesoria?.nombre}`}</h1>
       <audio ref={audioReference} src='/notification.wav' />
       <ChatsContainer mensajes={messages} usuarioActual={authentication ? authentication.email : ''}/>
       <div className='w-full flex flex-row gap-4'>
