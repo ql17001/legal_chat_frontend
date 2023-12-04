@@ -26,7 +26,7 @@ const Header = () => {
     
 
     return (
-        <div className='w-full items-end pb-5 pt-5 flex flex-row justify-between pl-10 bg-blue-600 text-white'>
+        <div className='w-full items-end pb-5 pt-5 flex flex-row justify-between pl-10 bg-theme-dark-blue text-white'>
             <Link href={role ? Routes.HOME : Routes.LOGIN } className='text-xl px-20 font-bold'>LegalChat</Link>
 
             <div className="flex flex-row items-center pr-20">
