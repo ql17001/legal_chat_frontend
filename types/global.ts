@@ -5,6 +5,7 @@ export interface IFecha {
 }
 
 export interface IMensaje {
+  id: number;
   fechaEnvio: IFecha;
   contenido: string;
   usuario: {
