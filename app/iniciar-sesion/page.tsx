@@ -39,12 +39,13 @@ const LoginPage = () =>{
           headers: { "Content-Type": "application/json" }
         });
 
-        const {roles} = jwtDecode<{roles:string[]}>(response.data.token);
+        const {roles, username} = jwtDecode<{roles:string[], username: string}>(response.data.token);
 
         persistAuthentication({
           token: response.data.token,
           refreshToken: response.data.refreshToken,
           role: roles[0],
+          email: username
         });
 
         router.push(Routes.HOME);

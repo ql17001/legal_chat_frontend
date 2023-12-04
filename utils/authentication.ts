@@ -4,6 +4,7 @@ interface IAuthentication {
   token: string;
   refreshToken: string;
   role: string;
+  email: string;
 }
 
 export const persistAuthentication = (authentication:IAuthentication) => {
