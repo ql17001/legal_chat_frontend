@@ -2,7 +2,7 @@ import axios from "axios";
 import { deleteAuthentication, retrieveAuthentication } from "./authentication";
 
 const customAxios = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: process.env.NEXT_PUBLIC_API,
 })
 
 customAxios.interceptors.request.use(

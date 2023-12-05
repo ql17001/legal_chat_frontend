@@ -90,7 +90,7 @@ const ChatPage = ({params: {id}}:IProperties) => {
   }
 
   useEffect(() => {
-    const url = new URL('https://localhost/.well-known/mercure');
+    const url = new URL(`${process.env.NEXT_PUBLIC_MERCURE_URL}`);
     url.searchParams.append('topic', mercure ? mercure.topic : '');
 
     const es = new EventSourcePolyfill(url.toString(), {

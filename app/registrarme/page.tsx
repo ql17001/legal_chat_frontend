@@ -41,7 +41,7 @@ const RegisterPage = () => {
   const Register = async () => {
     try {
       const response = await axios.post<IRegisterResponse>(
-        "http://localhost:8000/usuario/registrarme",
+        `${process.env.NEXT_PUBLIC_API}/usuario/registrarme`,
         {
           email: email,
           password: password,
